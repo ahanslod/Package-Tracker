@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "C:\\Projects\\discord-ups-bot\\db\\tracker.db",
+            "driver": "SQLite",
+            "name": "SQLite",
+            "previewLimit": 50
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}
