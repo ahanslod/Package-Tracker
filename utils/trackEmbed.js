@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const createEmbed = (
   carrier,
   trackingNumber,
+  note = 'Tracker',
   status,
   lastLocation,
   lastDateTime,
@@ -11,7 +12,7 @@ const createEmbed = (
 ) => {
   const embed = new Discord.MessageEmbed()
     .setColor('#0099ff')
-    .setTitle(carrier.toUpperCase())
+    .setTitle(`${carrier} - ${note}`)
     .setURL(url)
     .setAuthor(
       'Package Tracker',
@@ -27,7 +28,7 @@ const createEmbed = (
       { name: 'Est. Delivery Date', value: deliveryEstimate }
     )
     .setTimestamp(new Date())
-    .setFooter('.cmd', 'https://i.imgur.com/jBOX9tl.png');
+    .setFooter('.cmd for commands', 'https://i.imgur.com/jBOX9tl.png');
 
   return embed;
 };

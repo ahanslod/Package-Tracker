@@ -5,4 +5,12 @@ module.exports = (client) => {
   });
 
   console.log(`Connected to ${client.user.username}'s SQLite3 database.`);
+
+  client.user
+    .setPresence({
+      activity: { name: '.cmd for commands', type: 'WATCHING' },
+      status: 'available',
+    })
+    .then(console.log)
+    .catch(console.error);
 };

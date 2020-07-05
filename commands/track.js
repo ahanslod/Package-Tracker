@@ -2,7 +2,6 @@ const getTrackDetails = require('../utils/getTrackDetails');
 const trackEmbed = require('../utils/trackEmbed');
 
 exports.run = async (client, msg, args) => {
-  console.log(args);
   const tracker = new client.EasyPost.Tracker({
     carrier: args[0],
     tracking_code: args[1],
@@ -10,8 +9,14 @@ exports.run = async (client, msg, args) => {
 
   try {
     // Deconstruct after await
-    const req = await tracker.save();
+    const req = await tracker.save().catch((err) => {
+      throw err;
+    });
+    // console.log(req);
+    if (req.status === 'unknown') throw 'Unknown Tracking Number';
+
     const { est_delivery_date, tracking_details, public_url } = req;
+
     const {
       message,
       lastLocation,
@@ -27,6 +32,7 @@ exports.run = async (client, msg, args) => {
       trackEmbed.createEmbed(
         args[0],
         args[1],
+        args[2],
         message,
         lastLocation,
         lastDateTime,
@@ -34,9 +40,13 @@ exports.run = async (client, msg, args) => {
         public_url
       )
     );
+    return false;
   } catch (e) {
     console.log(e);
-    return msg.channel.send(e.error.error.message);
+    msg.channel.send(
+      'Please confirm that both the carrier and tracking number are correct.'
+    );
+    return true;
   }
 };
 
@@ -45,5 +55,5 @@ exports.help = {
   aliases: ['t', 'trk'],
   category: 'Primary',
   description: 'Track Package',
-  usage: '.track [carrier] [tracking_number]',
+  usage: '.track [carrier] [tracking_number] [note {optional}]',
 };

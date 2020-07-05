@@ -5,7 +5,9 @@ const lastArrayElement = (moment, est, details) => {
 
   // Format Estimate Delivery
   const deliveryEstimate =
-    est !== null ? moment(est).format('MMMM Do YYYY, h:mm:ss A z') : 'N/A';
+    est !== null
+      ? moment(est).format('MMMM Do YYYY, h:mm:ss A z')
+      : 'Not Available';
 
   const lastDateTime = moment(datetime).format('MMMM Do YYYY, h:mm:ss A z');
 

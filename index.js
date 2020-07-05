@@ -47,8 +47,10 @@ const init = async () => {
   const eventFile = await readdir('./events/');
   console.log(`Loading a total of ${eventFile.length} events.`);
   eventFile.forEach((f) => {
+    if (!f.endsWith('.js')) return;
     const eventName = f.split('.')[0];
     const event = require(`./events/${f}`);
+    console.log(`Attempting to load command ${eventName}`);
     client.on(eventName, event.bind(null, client));
     delete require.cache[require.resolve(`./events/${f}`)];
   });

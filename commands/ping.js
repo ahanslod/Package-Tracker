@@ -7,5 +7,5 @@ exports.help = {
   aliases: ['p'],
   category: 'Miscelaneous',
   description: "It like... Pings. Then Pongs. And it's not Ping Pong.",
-  usage: 'ping',
+  usage: '.ping',
 };
