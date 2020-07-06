@@ -17,6 +17,7 @@ const ngrok = require('ngrok');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const dbSchemas = require('./utils/dbSchemas.json');
 const hookHandler = require('./utils/hookHandler');
+const { CLIENT_RENEG_LIMIT } = require('tls');
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -25,6 +26,7 @@ client.dbSchemas = dbSchemas;
 client.db = db;
 client.EasyPost = api;
 client.prefix = process.env.PREFIX;
+client.channel_id = process.env.CHANNEL_ID;
 
 const init = async () => {
   // Loading the commands now
@@ -83,7 +85,7 @@ app.listen(process.env.PORT, () => {
     webhook.save().then(console.log);
 
     console.log(
-      `Publically accessible tunnel to localhost:${process.env.PORT} is available on ${url}`
+      `Publically accessible tunnel to localhost:${process.env.PORT} is available on ${url}/hook`
     );
   })();
 });

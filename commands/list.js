@@ -2,6 +2,7 @@ const listEmbed = require('../utils/listEmbed');
 
 exports.run = async (client, msg, args) => {
   try {
+    // List all packages inside Watch List
     client.db.all(client.dbSchemas['list'], [], (err, rows) => {
       if (err) {
         throw err;

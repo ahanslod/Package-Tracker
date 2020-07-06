@@ -1,5 +1,6 @@
 exports.run = async (client, msg, args) => {
   try {
+    // Remove item from Watch List
     client.db.run(client.dbSchemas['remove'], args[0], function (err) {
       if (err) {
         throw err;

@@ -2,6 +2,7 @@ const getTrackDetails = require('../utils/getTrackDetails');
 const trackEmbed = require('../utils/trackEmbed');
 
 exports.run = async (client, msg, args) => {
+  // Request tracking details from EasyPost API
   const tracker = new client.EasyPost.Tracker({
     carrier: args[0],
     tracking_code: args[1],
@@ -12,7 +13,7 @@ exports.run = async (client, msg, args) => {
     const req = await tracker.save().catch((err) => {
       throw err;
     });
-    // console.log(req);
+
     if (req.status === 'unknown') throw 'Unknown Tracking Number';
 
     const { est_delivery_date, tracking_details, public_url } = req;

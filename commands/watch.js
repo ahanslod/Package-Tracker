@@ -9,7 +9,7 @@ exports.run = async (client, msg, args) => {
 
   const note = args[2] === undefined ? msg.author.username : args[2];
 
-  // Checks if Tracking Number is unique
+  // Checks if Tracking Number is exists in Watch List
   const queryExist = function (
     query = client.dbSchemas['listExist'],
     data = [args[1]]
@@ -24,7 +24,7 @@ exports.run = async (client, msg, args) => {
       });
     });
   };
-  console.log(await queryExist());
+
   if ((await queryExist()) > 0)
     return msg.channel.send(`${args[1]} is already in Watch List`);
 
@@ -47,15 +47,14 @@ exports.run = async (client, msg, args) => {
   if ((await queryList()) > 9)
     return msg.channel.send('Watch List Full - Maximum of 10 Trackers');
 
-  console.log(await queryList());
-
   // Inserts new Tracker into watch list
   const queryInsert = function (
     query = client.dbSchemas['watch'],
-    data = [args[1], msg.author.username, args[0], note]
+    data = [args[1], msg.author.id, args[0], note, msg.author.username]
   ) {
     return new Promise(function (resolve, reject) {
       client.db.run(query, data, function (err) {
+        console.log(data);
         if (err) {
           reject(err);
         } else {
@@ -67,7 +66,7 @@ exports.run = async (client, msg, args) => {
 
   if ((await queryInsert()) > 0)
     return msg.channel.send(
-      `Now monitoring package from ${args[0]} : ${args[1]}`
+      `Now monitoring package from ${args[0]} with Tracking # ${args[1]} for <@${msg.author.id}>`
     );
 };
 

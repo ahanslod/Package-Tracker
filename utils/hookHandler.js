@@ -40,8 +40,8 @@ const trackerUpdate = async (client, json) => {
   if ((await queryExist()) === 0) return;
 
   // Get Note of the Watch List Item
-  const queryNote = function (
-    query = client.dbSchemas['note'],
+  const queryHook = function (
+    query = client.dbSchemas['hook'],
     data = [tracking_code]
   ) {
     return new Promise(function (resolve, reject) {
@@ -49,21 +49,23 @@ const trackerUpdate = async (client, json) => {
         if (err) {
           reject(err);
         } else {
-          resolve(row[0].note);
+          resolve({ id: row[0].userid, note: row[0].note });
         }
       });
     });
   };
+  console.log(await queryHook());
 
-  //.get() with an id <client>.channels.cache.get('1234567890').send('Hello world.');
-  //.find() with a function to find one by name, good for server-specific channel <guild>.channels.cache.find(ch => ch.name === 'general').send('Hello world.');
+  const hookResults = await queryHook();
+
+  // Send tracker update to channel id and mention user
   client.channels.cache
-    .get('729486355452919818')
+    .get(client.channel_id)
     .send(
       trackEmbed.createEmbed(
         carrier,
         tracking_code,
-        await queryNote(),
+        hookResults.note,
         message,
         lastLocation,
         lastDateTime,
@@ -71,6 +73,9 @@ const trackerUpdate = async (client, json) => {
         public_url
       )
     );
+  client.channels.cache
+    .get(client.channel_id)
+    .send(`Tracker Update for <@${hookResults.id}>`);
 };
 
 module.exports = {
