@@ -78,6 +78,9 @@ app.post('/hook', (req, res) => {
 app.listen(process.env.PORT, () => {
   (async function () {
     const url = await ngrok.connect(process.env.PORT);
+    const webhook = new api.Webhook({ url: url + '/hook' });
+
+    webhook.save().then(console.log);
 
     console.log(
       `Publically accessible tunnel to localhost:${process.env.PORT} is available on ${url}`
