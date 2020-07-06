@@ -1,7 +1,7 @@
-const trackEmbed = require('../utils/cmdEmbed');
+const cmdEmbed = require('../utils/cmdEmbed');
 
 exports.run = async (client, msg, args) => {
-  msg.channel.send(trackEmbed.createEmbed());
+  msg.channel.send(cmdEmbed.createEmbed());
 };
 
 exports.help = {

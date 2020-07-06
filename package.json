@@ -21,6 +21,7 @@
     "fs": "0.0.1-security",
     "install": "^0.13.0",
     "moment": "^2.27.0",
+    "ngrok": "^3.2.7",
     "node-pre-gyp": "^0.15.0",
     "sqlite3": "^5.0.0",
     "util": "^0.12.3"

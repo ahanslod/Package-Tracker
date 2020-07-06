@@ -44,7 +44,7 @@ exports.run = async (client, msg, args) => {
     });
   };
 
-  if ((await queryList()) > 10)
+  if ((await queryList()) > 9)
     return msg.channel.send('Watch List Full - Maximum of 10 Trackers');
 
   console.log(await queryList());
@@ -57,7 +57,6 @@ exports.run = async (client, msg, args) => {
     return new Promise(function (resolve, reject) {
       client.db.run(query, data, function (err) {
         if (err) {
-          console.log(err);
           reject(err);
         } else {
           resolve(this.changes);

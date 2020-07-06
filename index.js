@@ -11,11 +11,12 @@ const { promisify } = require('util');
 const readdir = promisify(require('fs').readdir);
 const moment = require('moment');
 const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
+const ngrok = require('ngrok');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const dbSchemas = require('./utils/dbSchemas.json');
-
-console.log(dbSchemas);
+const hookHandler = require('./utils/hookHandler');
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -61,3 +62,25 @@ const init = async () => {
 };
 
 init();
+
+// Use Json and complex algo for deep parsing to deal with nested objects
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Webhook endpoint
+app.post('/hook', (req, res) => {
+  if (req.body.description !== 'tracker.created')
+    hookHandler.trackerUpdate(client, req.body.result);
+  res.sendStatus(200);
+});
+
+// Loading express server
+app.listen(process.env.PORT, () => {
+  (async function () {
+    const url = await ngrok.connect(process.env.PORT);
+
+    console.log(
+      `Publically accessible tunnel to localhost:${process.env.PORT} is available on ${url}`
+    );
+  })();
+});
