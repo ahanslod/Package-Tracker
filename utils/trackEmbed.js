@@ -4,6 +4,7 @@ const createEmbed = (
   carrier,
   trackingNumber,
   note = 'Tracker',
+  user,
   status,
   lastLocation,
   lastDateTime,
@@ -19,6 +20,7 @@ const createEmbed = (
       'https://i.imgur.com/jBOX9tl.png',
       'https://discord.js.org'
     )
+    .setDescription(`**Request by <@${user}>**`)
     .setThumbnail('https://i.imgur.com/jBOX9tl.png')
     .addFields(
       { name: 'Tracking Number', value: trackingNumber },

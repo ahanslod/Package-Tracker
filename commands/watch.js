@@ -9,7 +9,7 @@ exports.run = async (client, msg, args) => {
 
   const note = args[2] === undefined ? msg.author.username : args[2];
 
-  // Checks if Tracking Number is exists in Watch List
+  // Checks if Tracking Number exists in Watch List
   const queryExist = function (
     query = client.dbSchemas['listExist'],
     data = [args[1]]

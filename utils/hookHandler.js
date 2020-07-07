@@ -54,7 +54,6 @@ const trackerUpdate = async (client, json) => {
       });
     });
   };
-  console.log(await queryHook());
 
   const hookResults = await queryHook();
 
@@ -66,6 +65,7 @@ const trackerUpdate = async (client, json) => {
         carrier,
         tracking_code,
         hookResults.note,
+        hookResults.id,
         message,
         lastLocation,
         lastDateTime,

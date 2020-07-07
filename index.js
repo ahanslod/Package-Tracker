@@ -14,10 +14,10 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const ngrok = require('ngrok');
+const axios = require('axios');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const dbSchemas = require('./utils/dbSchemas.json');
 const hookHandler = require('./utils/hookHandler');
-const { CLIENT_RENEG_LIMIT } = require('tls');
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
@@ -80,8 +80,25 @@ app.post('/hook', (req, res) => {
 app.listen(process.env.PORT, () => {
   (async function () {
     const url = await ngrok.connect(process.env.PORT);
-    const webhook = new api.Webhook({ url: url + '/hook' });
 
+    // Get All Webhooks via Axios [EasyPost Webhook List Retrieval gives data issues]
+    const data = function () {
+      return new Promise(function (resolve, reject) {
+        axios
+          .get(process.env.EASYPOST_API_URL, {
+            auth: { username: process.env.EASYPOST_TOKEN, password: '' },
+          })
+          .then((query) => resolve(query.data.webhooks))
+          .catch((err) => reject(err));
+      });
+    };
+
+    // Delete Previous Webhooks
+    const hooks = await data();
+    hooks.forEach((hook) => api.Webhook.delete(hook.id));
+
+    // Create New Webhook
+    const webhook = new api.Webhook({ url: url + '/hook' });
     webhook.save().then(console.log);
 
     console.log(
